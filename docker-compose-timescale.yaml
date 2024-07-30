@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  timescaledb:
+    image: timescale/timescaledb:latest-pg14
+    container_name: timescaledb
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "_WLy_lbUbtWiC7Yzs-lA6SWfrirmOmlI"
+      POSTGRES_DB: pod
+    volumes:
+      - timescaledb_data:/var/lib/postgresql/data
+    restart: always
+
+  timescaledb_cached:
+    image: timescale/timescaledb:latest-pg14
+    container_name: timescaledb_cached
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "_WLy_lbUbtWiC7Yzs-lA6SWfrirmOmlI"
+      POSTGRES_DB: pod_cached
+    volumes:
+      - timescaledb_cached_data:/var/lib/postgresql/data
+      - ./timescaledb_cached.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    restart: always
+
+  postgres:
+    image: postgres:14.1
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "your_password"
+      POSTGRES_DB: your_database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always
+
+  postgres_cached:
+    image: postgres:14.1
+    container_name: postgres_cached
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "your_password"
+      POSTGRES_DB: your_cached_database
+    volumes:
+      - postgres_cached_data:/var/lib/postgresql/data
+      - ./postgresql_cached.conf:/etc/postgresql/postgresql.conf
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf
+    restart: always
+
+volumes:
+  timescaledb_data:
+  timescaledb_cached_data:
+  postgres_data:
+  postgres_cached_data:
