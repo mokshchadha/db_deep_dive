@@ -1,7 +1,7 @@
 // transferData.js
 
 const { Client } = require('pg');
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
 const JSONStream = require('JSONStream');
 const { POSTGRES } = require('./constants');
@@ -94,30 +94,20 @@ async function transferData() {
 
  
   const filePath = path.join(__dirname, 'order_tasks.json');
-  const stream = fs.createReadStream(filePath, { encoding: 'utf8' });
+  const fileContent = await fs.readFile(filePath, 'utf8');
+  const orders = JSON.parse(fileContent);
 
-  const jsonStream = JSONStream.parse('*');
-
-  stream.pipe(jsonStream);
-
-  jsonStream.on('data', async (doc) => {
+  for(const doc of orders){
     try {
       await migrateOrders(pgClient, doc);
       await transferActivityLog(pgClient, doc);
     } catch (err) {
       console.error('Error during data migration:', err);
     }
-  });
+  }
 
-  jsonStream.on('end', async () => {
-    console.log('Data transfer complete.');
-    await pgClient.end();
-  });
-
-  jsonStream.on('error', async (err) => {
-    console.error('Error during data migration:', err);
-    await pgClient.end();
-  });
+ 
+  await pgClient.end();
 }
 
 transferData().catch(console.error);
