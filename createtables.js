@@ -1,8 +1,8 @@
 const { Client } = require("pg");
-const { POSTGRES } = require("./constants");
+const { POSTGRES, TIMESCALEDB } = require("./constants");
 
 const pgClient = new Client({
-  ...POSTGRES,
+  ...TIMESCALEDB,
 });
 
 const createTables = async () => {

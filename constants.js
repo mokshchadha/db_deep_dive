@@ -30,11 +30,20 @@ const TIMESCALEDB = {
     password: 'password',
     port: 5435,  
   };
+
+  const MYSQL = {
+    host: 'localhost',
+    user: 'myuser',
+    password: 'mypassword',
+    database: 'mydatabase',
+    port: 3333,
+  }
   
 
   module.exports = {
     TIMESCALEDB, 
     TIMESCALEDB_CACHED,
     POSTGRES,
-    POSTGRES_CACHED
+    POSTGRES_CACHED,
+    MYSQL
   }
