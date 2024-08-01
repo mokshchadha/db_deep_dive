@@ -16,18 +16,18 @@ const TIMESCALEDB = {
   };
   
   const POSTGRES = {
-    user: 'postgres',
+    user: 'myuser',
     host: 'localhost',
-    database: 'your_database',
-    password: 'your_password',
-    port: 5432,  
+    database: 'mydatabase',
+    password: 'mypassword',
+    port: 5499,  
   };
   
   const POSTGRES_CACHED = {
-    user: 'postgres',
+    user: 'myuser',
     host: 'localhost',
-    database: 'your_cached_database',
-    password: 'your_password',
+    database: 'cached_database',
+    password: 'password',
     port: 5435,  
   };
   

@@ -1,29 +1,15 @@
-// transferData.js
-
-const { MongoClient } = require('mongodb');
+const {POSTGRES} = require("./constants")
 const { Client } = require('pg');
+const fs = require('fs').promises;
+const path = require('path');
 
-// MongoDB connection details
-const mongoUri = 'mongodb://localhost:27017';
-const mongoDbName = 'your_mongo_db_name';
-const mongoCollectionName = 'your_mongo_collection_name';
-
-// PostgreSQL connection details
 const pgConfig = {
-  user: 'your_pg_user',
-  host: 'localhost',
-  database: 'your_pg_database',
-  password: 'your_pg_password',
-  port: 5432,
+ ...POSTGRES
 };
 
-async function migrateOrders(mongoDb, pgClient) {
-  // Fetch data from MongoDB
-  const mongoCollection = mongoDb.collection(mongoCollectionName);
-  const mongoData = await mongoCollection.find().toArray();
-
-  // Insert data into PostgreSQL
-  for (const doc of mongoData) {
+async function migrateOrders(pgClient, orders ) {
+ 
+  for (const doc of orders) {
     const {
       _id,
       buyerDueDate,
@@ -43,7 +29,7 @@ async function migrateOrders(mongoDb, pgClient) {
     } = doc;
 
     const query = `
-      INSERT INTO your_table_name (
+      INSERT INTO orders (
         id, buyer_due_date, buyer_payment_terms, company_gst, created_at, dispatch_date, due_date,
         freight_payment, godown_id, group_state_owner, order_no, quantity, single_quantity, status, supplier_id
       ) VALUES (
@@ -60,27 +46,55 @@ async function migrateOrders(mongoDb, pgClient) {
   }
 }
 
-async function transferData() {
-  // Connect to MongoDB
-  const mongoClient = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
-  await mongoClient.connect();
-  const mongoDb = mongoClient.db(mongoDbName);
+async function transferActivityLog(pgClient, orders) {
+  for (const doc of orders) {
+    const { orderId, activityLog } = doc;
 
-  // Connect to PostgreSQL
+    const query = `
+      INSERT INTO activity_log (
+        order_id, data
+      ) VALUES (
+        $1, $2
+      )
+    `;
+
+    const values = [
+      orderId, activityLog
+    ];
+
+    await pgClient.query(query, values);
+  }
+}
+
+async function transferData() {
   const pgClient = new Client(pgConfig);
   await pgClient.connect();
 
-  try {
-    // Migrate data
-    await migrateOrders(mongoDb, pgClient);
+  const filePath = path.join(__dirname, 'orders.json');
+  const stream = fs.createReadStream(filePath, { encoding: 'utf8' });
+
+  const jsonStream = JSONStream.parse('*');
+
+  stream.pipe(jsonStream);
+
+  jsonStream.on('data', async (doc) => {
+    try {
+      await migrateOrders(pgClient, doc);
+      await transferActivityLog(pgClient, doc);
+    } catch (err) {
+      console.error('Error during data migration:', err);
+    }
+  });
+
+  jsonStream.on('end', async () => {
     console.log('Data transfer complete.');
-  } catch (err) {
-    console.error('Error during data migration:', err);
-  } finally {
-    // Close connections
     await pgClient.end();
-    await mongoClient.close();
-  }
+  });
+
+  jsonStream.on('error', async (err) => {
+    console.error('Error during data migration:', err);
+    await pgClient.end();
+  });
 }
 
 transferData().catch(console.error);

@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   timescaledb:
@@ -30,27 +30,27 @@ services:
     restart: always
 
   postgres:
-    image: postgres:14.1
+    image: postgres:16-alpine
     container_name: postgres
     ports:
-      - "5432:5432"
+      - "5499:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "your_password"
-      POSTGRES_DB: your_database
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
     volumes:
       - postgres_data:/var/lib/postgresql/data
     restart: always
 
   postgres_cached:
-    image: postgres:14.1
+    image: postgres:16-alpine
     container_name: postgres_cached
     ports:
       - "5435:5432"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "your_password"
-      POSTGRES_DB: your_cached_database
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cached_database
     volumes:
       - postgres_cached_data:/var/lib/postgresql/data
       - ./postgresql_cached.conf:/etc/postgresql/postgresql.conf

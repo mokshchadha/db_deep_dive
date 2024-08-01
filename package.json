@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "json-stream": "^1.0.0",
     "pg": "^8.12.0"
   }
 }
