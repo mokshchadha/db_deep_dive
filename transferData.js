@@ -4,11 +4,11 @@ const { Client } = require('pg');
 const fs = require('fs').promises;
 const path = require('path');
 const JSONStream = require('JSONStream');
-const {TIMESCALEDB } = require('./constants');
+const {TIMESCALEDB, POSTGRES_CACHED } = require('./constants');
 
  
 const pgConfig = {
- ...TIMESCALEDB
+ ...POSTGRES_CACHED
 };
 
 function convertMongoTimestamp(mongoTimestamp) {

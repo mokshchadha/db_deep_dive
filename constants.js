@@ -23,11 +23,11 @@ const POSTGRES = {
 };
 
 const POSTGRES_CACHED = {
-  user: "myuser",
+  user: "moksh",
   host: "localhost",
-  database: "cached_database",
-  password: "password",
-  port: 5435,
+  database: "postgres",
+  password: "",
+  port: 5432,
 };
 
 const MYSQL = {
