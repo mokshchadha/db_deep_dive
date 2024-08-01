@@ -16,7 +16,7 @@ function convertMongoTimestamp(mongoTimestamp) {
   return new Date().toISOString().slice(0, 19).replace('T', ' ');
 }
 
-async function migrateOrders(mysqlConnection, doc) {
+async function migrateOrders(mysqlConnection, doc, id) {
   const {
     _id,
     buyerDueDate,
@@ -54,7 +54,7 @@ async function migrateOrders(mysqlConnection, doc) {
     freightPayment,
     godownId,
     groupStateOwner,
-    orderNo,
+    orderNo + id,
     parseInt(quantity),
     parseInt(singleQuantity) ?? 0,
     status,
@@ -64,9 +64,9 @@ async function migrateOrders(mysqlConnection, doc) {
   await mysqlConnection.execute(query, values);
 }
 
-async function transferActivityLog(mysqlConnection, doc) {
+async function transferActivityLog(mysqlConnection, doc, id) {
   const { orderNo, freightPaymentApplicationDetails } = doc;
-  const _id = orderNo;
+  const _id = orderNo + id;
   const rest = freightPaymentApplicationDetails ?? {};
 
   const query = `
@@ -94,8 +94,9 @@ async function transferData() {
 
   for (const doc of orders) {
     try {
-      await migrateOrders(mysqlConnection, doc);
-      await transferActivityLog(mysqlConnection, doc);
+      const id = crypto.randomUUID()
+      await migrateOrders(mysqlConnection, doc, id);
+      await transferActivityLog(mysqlConnection, doc, id);
     } catch (err) {
       console.error('Error during data migration:', err);
     }

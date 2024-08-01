@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   timescaledb:
-    image: timescale/timescaledb:latest-pg14
+    image: timescale/timescaledb-ha:pg16
     container_name: timescaledb
     ports:
       - "5433:5432"
@@ -15,7 +15,7 @@ services:
     restart: always
 
   timescaledb_cached:
-    image: timescale/timescaledb:latest-pg14
+    image: timescale/timescaledb-ha:pg16
     container_name: timescaledb_cached
     ports:
       - "5434:5432"

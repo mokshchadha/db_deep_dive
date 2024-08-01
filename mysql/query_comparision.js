@@ -24,6 +24,10 @@ async function joinQuery(mysqlConnection){
     console.time("join_50000_records_mysql");
     await mysqlConnection.query(`${query} LIMIT 50000`);
     console.timeEnd("join_50000_records_mysql");
+
+    console.time("join_100000_records_mysql");
+    await mysqlConnection.query(`${query} LIMIT 100000`);
+    console.timeEnd("join_100000_records_mysql");
 }
 
 async function timeRangeQuery(mysqlConnection){
@@ -44,9 +48,14 @@ async function timeRangeQuery(mysqlConnection){
     console.time("range_50000_records_mysql");
     await mysqlConnection.query(`${query} LIMIT 50000`);
     console.timeEnd("range_50000_records_mysql");
+
+    console.time("range_100000_records_mysql");
+    await mysqlConnection.query(`${query} LIMIT 100000`);
+    console.timeEnd("range_100000_records_mysql");
 }
 
 async function main(){
+    console.log("===============Mysql=====================")
     const mysqlConnection = await mysql.createConnection(mysqlConfig);
     console.log("join_query=================");
     await joinQuery(mysqlConnection);

@@ -1,27 +1,32 @@
-const { POSTGRES } = require('./constants');
+const {  TIMESCALEDB } = require('./constants');
 const { Client } = require('pg');
  
 const pgConfig = {
- ...POSTGRES
+ ...TIMESCALEDB
 };
 
 async function joinQuery(pgClient){
+    const query = `select * from orders join activity_log al ON al.order_no = orders.order_no`
     console.time("join_500_records_timescale")
-    await pgClient.query( `select * from orders join activity_log al ON al.order_no = orders.order_no  limit 500`)
+    await pgClient.query( `${query}  limit 500`)
     console.timeEnd("join_500_records_timescale")
    
 
     console.time("join_1000_records_timescale")
-    await pgClient.query( `select * from orders join activity_log al ON al.order_no = orders.order_no  limit 1000`)
+    await pgClient.query( `${query}  limit 1000`)
     console.timeEnd("join_1000_records_timescale")
 
     console.time("join_10000_records_timescale")
-    await pgClient.query( `select * from orders join activity_log al ON al.order_no = orders.order_no  limit 10000`)
+    await pgClient.query( `${query}  limit 10000`)
     console.timeEnd("join_10000_records_timescale")
 
     console.time("join_50000_records_timescale")
-    await pgClient.query( `select * from orders join activity_log al ON al.order_no = orders.order_no  limit 50000`)
+    await pgClient.query( `${query}  limit 50000`)
     console.timeEnd("join_50000_records_timescale")
+
+    console.time("join_100000_records_timescale")
+    await pgClient.query( `${query}  limit 100000`)
+    console.timeEnd("join_100000_records_timescale")
 }
 
 async function timeRangeQuery(pgClient){
@@ -41,10 +46,15 @@ async function timeRangeQuery(pgClient){
     console.time("range_50000_records_timescale")
     await pgClient.query(`${query} limit 50000`)
     console.timeEnd("range_50000_records_timescale")
+
+    console.time("range_100000_records_timescale")
+    await pgClient.query(`${query} limit 100000`)
+    console.timeEnd("range_100000_records_timescale")
 }
 
 
 async function main(){
+    console.log("===============Timescaledb=====================")
     const pgClient = new Client(pgConfig);
     await pgClient.connect();
     console.log("join_query=================")

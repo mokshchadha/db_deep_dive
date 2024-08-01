@@ -1,14 +1,14 @@
-// transferData.js
+ 
 
 const { Client } = require('pg');
 const fs = require('fs').promises;
 const path = require('path');
 const JSONStream = require('JSONStream');
-const { POSTGRES, TIMESCALEDB } = require('./constants');
+const {TIMESCALEDB } = require('./constants');
 
-// PostgreSQL connection details
+ 
 const pgConfig = {
- ...POSTGRES
+ ...TIMESCALEDB
 };
 
 function convertMongoTimestamp(mongoTimestamp) {

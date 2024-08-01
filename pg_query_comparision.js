@@ -7,8 +7,9 @@ const pgConfig = {
 
 async function joinQuery(pgClient){
     const query = `select * from orders join activity_log al ON al.order_no = orders.order_no `
+    
     console.time("join_500_records_pg")
-    await pgClient.query( `${query} limit 500`)
+    await pgClient.query(`${query} limit 500`)
     console.timeEnd("join_500_records_pg")
 
     console.time("join_1000_records_pg")
@@ -22,6 +23,10 @@ async function joinQuery(pgClient){
     console.time("join_50000_records_pg")
     await pgClient.query(`${query} limit 50000`)
     console.timeEnd("join_50000_records_pg")
+
+    console.time("join_100000_records_pg")
+    await pgClient.query(`${query} limit 100000`)
+    console.timeEnd("join_100000_records_pg")
 }
 
 async function timeRangeQuery(pgClient){
@@ -41,10 +46,15 @@ async function timeRangeQuery(pgClient){
     console.time("range_50000_records_pg")
     await pgClient.query(`${query} limit 50000`)
     console.timeEnd("range_50000_records_pg")
+
+    console.time("range_100000_records_pg")
+    await pgClient.query(`${query} limit 100000`)
+    console.timeEnd("range_100000_records_pg")
 }
 
 
 async function main(){
+    console.log("===============Postgres=====================")
     const pgClient = new Client(pgConfig);
     await pgClient.connect();
     console.log("join_query=================")
