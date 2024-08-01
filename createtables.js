@@ -27,13 +27,31 @@ const createTables = async () => {
         quantity INTEGER,
         single_quantity INTEGER,
         status VARCHAR(50),
-        supplier_id VARCHAR(255)
+        supplier_id VARCHAR(255),
+        transit_distance VARCHAR(255),
+        supplier_price INTEGER,
+        godown VARCHAR(255),
+        delivered_to VARCHAR(255),
+        product_id VARCHAR(255),
+        zcrm_id VARCHAR(255),
+        vehicle_no VARCHAR(255),
+        lr_no VARCHAR(255),
+        driver_mobile_no VARCHAR(255),
+        purchase_order_no VARCHAR(255)
       );
     `);
 
 
     await pgClient.query(`
       CREATE TABLE IF NOT EXISTS activity_log (
+        id SERIAL PRIMARY KEY,
+        order_no VARCHAR(255) REFERENCES orders(order_no),
+        data JSONB
+      );
+    `);
+
+    await pgClient.query(`
+      CREATE TABLE IF NOT EXISTS notes (
         id SERIAL PRIMARY KEY,
         order_no VARCHAR(255) REFERENCES orders(order_no),
         data JSONB
