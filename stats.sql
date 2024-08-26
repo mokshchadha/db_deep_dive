@@ -1,0 +1,1 @@
+SHOW block_size;
