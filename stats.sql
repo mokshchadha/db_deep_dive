@@ -1,6 +1,6 @@
 SHOW block_size;
 
-SHOW block_size;
+SHOW segment_size;
 
 -- Query to show compression settings
 SELECT name, setting 
