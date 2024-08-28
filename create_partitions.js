@@ -13,7 +13,7 @@ async function createPartitionedTable() {
 
   try {
     await client.query(`
-      CREATE TABLE IF NOT EXISTS wabachats_partitioned (
+      CREATE TABLE IF NOT EXISTS realchats_partitioned (
     previous_date            timestamp without time zone,
     todays_date             timestamp without time zone,
     person_name               varchar(255),
