@@ -29,14 +29,14 @@ async function processLargeCSV(filePath, batchSize = 10000) {
       lineCount++;
 
       if (batch.length >= batchSize) {
-        await insertBatch(client, batch);
+        insertBatch(client, batch);
         batch = [];
         console.log(`Processed ${lineCount} lines`);
       }
     }
 
     if (batch.length > 0) {
-      await insertBatch(client, batch);
+      insertBatch(client, batch);
     }
 
     console.log(
@@ -51,7 +51,7 @@ async function processLargeCSV(filePath, batchSize = 10000) {
 
 async function insertBatch(client, batch) {
   const query = format(
-    `INSERT INTO realchats (
+    `INSERT INTO real_chats (
       sys_msg_id, message_id, from_no, to_no, sender_name,
       event_direction, received_at, event_type, contextual_message_id,
       template_id, content_type, message_text, media, cta, placeholders
@@ -66,8 +66,8 @@ function formatRowObject(row) {
   return [
     row.sys_msg_id,
     row.message_id,
-    row.from,
-    row.to,
+    row.from_no,
+    row.to_no,
     row.sender_name,
     row.event_direction,
     handleEmptyTimestamp(row.received_at),
@@ -75,7 +75,7 @@ function formatRowObject(row) {
     row.contextual_message_id,
     row.template_id,
     row.content_type,
-    row.text,
+    row.message_text,
     handleJSONB(row.media),
     handleJSONB(row.cta),
     handleJSONB(row.placeholders)
@@ -98,4 +98,4 @@ function handleJSONB(value) {
   }
 }
 
-processLargeCSV("prod_chats.csv").catch(console.error);
+processLargeCSV("production_chats.csv").catch(console.error);

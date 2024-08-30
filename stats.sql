@@ -1,5 +1,7 @@
+-- show block size of the db
 SHOW block_size;
 
+-- show segment size of the db
 SHOW segment_size;
 
 -- Query to show compression settings
