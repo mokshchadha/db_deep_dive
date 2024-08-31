@@ -29,14 +29,14 @@ async function processLargeCSV(filePath, batchSize = 10000) {
       lineCount++;
 
       if (batch.length >= batchSize) {
-        insertBatch(client, batch);
+        await insertBatch(client, batch);
         batch = [];
         console.log(`Processed ${lineCount} lines`);
       }
     }
 
     if (batch.length > 0) {
-      insertBatch(client, batch);
+      await insertBatch(client, batch);
     }
 
     console.log(
@@ -51,7 +51,7 @@ async function processLargeCSV(filePath, batchSize = 10000) {
 
 async function insertBatch(client, batch) {
   const query = format(
-    `INSERT INTO real_chats (
+    `INSERT INTO real_chats_partitioned (
       sys_msg_id, message_id, from_no, to_no, sender_name,
       event_direction, received_at, event_type, contextual_message_id,
       template_id, content_type, message_text, media, cta, placeholders
