@@ -83,6 +83,8 @@ time_range_query=================
 ```
 
 ### Compare the performance of simple table vs Partition table 
+#### 10 million records
+```
 Running queries on Simple table
 Base query  select * from real_chats w where w.received_at > '2024-01-16' and from_no = '9873089003'
 
@@ -116,3 +118,4 @@ limit_200 : 18.175ms
 limit_1000 : 19.628ms
 limit_5000 : 53.264ms
 limit_10000 : 81.324ms
+```

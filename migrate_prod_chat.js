@@ -51,7 +51,7 @@ async function processLargeCSV(filePath, batchSize = 10000) {
 
 async function insertBatch(client, batch) {
   const query = format(
-    `INSERT INTO real_chats_partitioned (
+    `INSERT INTO real_chats (
       sys_msg_id, message_id, from_no, to_no, sender_name,
       event_direction, received_at, event_type, contextual_message_id,
       template_id, content_type, message_text, media, cta, placeholders
