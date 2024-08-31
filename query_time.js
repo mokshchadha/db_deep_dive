@@ -8,21 +8,22 @@ const pool = new Pool({
   port: 5432,
 });
 
-const TABLE_NAME = 'real_chats_partitioned'
-
-const BASE_QUERY_1 = `select * from ${TABLE_NAME} w where w.received_at > '2024-01-16' and from_no = '9873089003'`
+const TABLE_NAME = "real_chats";
+const PARTITION_TABLE_NAME = "real_chats_partitioned";
 
 async function runQueries() {
   const client = await pool.connect();
   try {
-    console.log("\n");
-    await simpleTableQueries(client);
-    console.log("\n");
-    await partitionedTableQueries(client);
+    const query1 = `select * from ${TABLE_NAME} w where w.received_at > '2024-01-16' and from_no = '9873089003'`;
+    await simpleTableQueries(client, query1);
+    const partitionQuery1 = `select * from ${PARTITION_TABLE_NAME} w where w.received_at > '2024-01-16' and from_no = '9873089003'`;
+    await partitionedTableQueries(client, partitionQuery1);
     console.log();
-    const baseQuery = `select * from ${TABLE_NAME}  w where w.received_at > '2024-01-16' and tsv_document @@ to_tsquery('simple', 'buyer')`
-    await simpleTableQueries(client, baseQuery);
-    await partitionedTableQueries(client, baseQuery)
+    const baseQuery2 = `select * from ${TABLE_NAME}  w where w.received_at > '2024-01-16' and tsv_document @@ to_tsquery('simple', 'buyer')`;
+
+    await simpleTableQueries(client, baseQuery2);
+    const partitionBaseQuery2 = `select * from ${PARTITION_TABLE_NAME}  w where w.received_at > '2024-01-16' and tsv_document @@ to_tsquery('simple', 'buyer')`;
+    await partitionedTableQueries(client, partitionBaseQuery2);
   } catch (err) {
     console.error("Error executing query", err.stack);
   } finally {
@@ -36,14 +37,11 @@ async function runQueries() {
 runQueries().catch((err) => console.error(err));
 //========================= raw queries
 
-async function simpleTableQueries(
-  client,
-  baseQuery = BASE_QUERY_1
-) {
-  console.log("Running queries on Simple table")
-  console.log("Base query ", baseQuery)
-  
-  console.log()
+async function simpleTableQueries(client, baseQuery = BASE_QUERY_1) {
+  console.log("Running queries on Simple table");
+  console.log("Base query ", baseQuery);
+
+  console.log();
   const query1 = `${baseQuery} limit 100;`;
   await queryTime(client, query1, "limit_100");
 
@@ -60,14 +58,11 @@ async function simpleTableQueries(
   await queryTime(client, query5, "limit_10000");
 }
 
-async function partitionedTableQueries(
-  client,
-  baseQuery = BASE_QUERY_1
-) {
-  console.log("Running queries on partitoned table")
-  console.log("Base query ", baseQuery)
-  
-  console.log()
+async function partitionedTableQueries(client, baseQuery = BASE_QUERY_1) {
+  console.log("Running queries on partitoned table");
+  console.log("Base query ", baseQuery);
+
+  console.log();
   const query1 = `${baseQuery} limit 100;`;
   await queryTime(client, query1, "limit_100");
 

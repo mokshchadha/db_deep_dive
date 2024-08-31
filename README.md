@@ -81,3 +81,38 @@ time_range_query=================
 [577.07ms] range_100000_records_mariadb
 
 ```
+
+### Compare the performance of simple table vs Partition table 
+Running queries on Simple table
+Base query  select * from real_chats w where w.received_at > '2024-01-16' and from_no = '9873089003'
+
+limit_100 : 11.19ms
+limit_200 : 0.535ms
+limit_1000 : 0.273ms
+limit_5000 : 0.527ms
+limit_10000 : 0.46ms
+Running queries on partitoned table
+Base query  select * from real_chats_partitioned w where w.received_at > '2024-01-16' and from_no = '9873089003'
+
+limit_100 : 284.187ms
+limit_200 : 8.362ms
+limit_1000 : 5.298ms
+limit_5000 : 40.057ms
+limit_10000 : 11.328ms
+
+Running queries on Simple table
+Base query  select * from real_chats  w where w.received_at > '2024-01-16' and tsv_document @@ to_tsquery('simple', 'buyer')
+
+limit_100 : 8.22ms
+limit_200 : 0.54ms
+limit_1000 : 0.333ms
+limit_5000 : 0.153ms
+limit_10000 : 0.257ms
+Running queries on partitoned table
+Base query  select * from real_chats_partitioned  w where w.received_at > '2024-01-16' and tsv_document @@ to_tsquery('simple', 'buyer')
+
+limit_100 : 18.315ms
+limit_200 : 18.175ms
+limit_1000 : 19.628ms
+limit_5000 : 53.264ms
+limit_10000 : 81.324ms
