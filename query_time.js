@@ -8,16 +8,19 @@ const pool = new Pool({
   port: 5432,
 });
 
+const TABLE_NAME = 'real_chats_partitioned'
+
+const BASE_QUERY_1 = `select * from ${TABLE_NAME} w where w.received_at > '2024-01-16' and from_no = '9873089003'`
+
 async function runQueries() {
   const client = await pool.connect();
-
   try {
     console.log("\n");
     await simpleTableQueries(client);
     console.log("\n");
     await partitionedTableQueries(client);
     console.log();
-    const baseQuery = "select * from wabachats w where w.received_at > '2024-01-16'and  to_tsvector('simple', person_name) @@ to_tsquery('simple', 'swap')"
+    const baseQuery = `select * from ${TABLE_NAME}  w where w.received_at > '2024-01-16' and tsv_document @@ to_tsquery('simple', 'buyer')`
     await simpleTableQueries(client, baseQuery);
     await partitionedTableQueries(client, baseQuery)
   } catch (err) {
@@ -35,7 +38,7 @@ runQueries().catch((err) => console.error(err));
 
 async function simpleTableQueries(
   client,
-  baseQuery = "select * from wabachats w where w.received_at > '2024-01-16'and whatsapp_number = '9873089003'"
+  baseQuery = BASE_QUERY_1
 ) {
   console.log("Running queries on Simple table")
   console.log("Base query ", baseQuery)
@@ -59,7 +62,7 @@ async function simpleTableQueries(
 
 async function partitionedTableQueries(
   client,
-  baseQuery = "select * from wabachats_partitioned w where w.received_at > '2024-01-16'and whatsapp_number = '9873089003'"
+  baseQuery = BASE_QUERY_1
 ) {
   console.log("Running queries on partitoned table")
   console.log("Base query ", baseQuery)
