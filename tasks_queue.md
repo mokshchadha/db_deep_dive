@@ -28,3 +28,4 @@
 
 ### 11 DB migration - create a script to migrate large volume of csv data faster
 
+### 12 add the idle script in the superset index.html and our source.one admin console
