@@ -119,3 +119,7 @@ limit_1000 : 19.628ms
 limit_5000 : 53.264ms
 limit_10000 : 81.324ms
 ```
+
+
+### PG TRGM
+https://www.postgresql.org/docs/current/pgtrgm.html
