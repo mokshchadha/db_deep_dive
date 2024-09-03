@@ -28,4 +28,13 @@
 
 ### 11 DB migration - create a script to migrate large volume of csv data faster
 
-### 12 add the idle script in the superset index.html and our source.one admin console
+### 12 add the idle script in the superset index.html and our source.one admin console 
+this is done and moved to prod
+
+### 13 use python in custom db and see if numpy and http request is working
+
+### 14 what are jails and containers in free bsd 
+https://docs.freebsd.org/en/books/handbook/jails/
+
+### 15 what is PF in freebsd 
+https://docs.freebsd.org/en/books/handbook/firewalls/
