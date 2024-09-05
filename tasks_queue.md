@@ -33,8 +33,11 @@ this is done and moved to prod
 
 ### 13 use python in custom db and see if numpy and http request is working
 
-### 14 what are jails and containers in free bsd 
+### 14.1 GEOM compress module
+https://docs.freebsd.org/en/books/handbook/geom/
+
+### 14.2 what are jails and containers in free bsd 
 https://docs.freebsd.org/en/books/handbook/jails/
 
-### 15 what is PF in freebsd 
+### 14.3 what is PF in freebsd 
 https://docs.freebsd.org/en/books/handbook/firewalls/
