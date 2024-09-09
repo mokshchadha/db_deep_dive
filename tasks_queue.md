@@ -43,3 +43,5 @@ https://docs.freebsd.org/en/books/handbook/jails/
 https://docs.freebsd.org/en/books/handbook/firewalls/
 
 ### 14.4 linux compatibility layer free bsd (need this to run dart in freebsd)
+
+## for every request there will be only 1 file/folder that runs (it can return rich content to the server can be html, htmx, graph etc)
