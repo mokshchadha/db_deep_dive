@@ -48,6 +48,8 @@ https://docs.freebsd.org/en/books/handbook/firewalls/
 ### 14.4 linux compatibility layer free bsd (need this to run dart in freebsd)  ✅ 
 https://docs.freebsd.org/en/books/handbook/linuxemu/
 
+### 14.5 check ktls freebsd
+
 ## for every request there will be only 1 file/folder that runs (it can return rich content to the server can be html, htmx, graph etc) - database is shared
 ## every file/folder is a application in its own can have its different languague but the databse is shared postgresql
 
