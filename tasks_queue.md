@@ -34,7 +34,7 @@ this is done and moved to prod
 
 ### 13 use python in custom db and see if numpy and http request is working
 
-### 14.1 GEOM compress module
+### 14.1 GEOM compress module - helps implement raid , encrption on disk etc ✅
 https://docs.freebsd.org/en/books/handbook/geom/
 
 ### 14.2 what are jails and containers in free bsd 
@@ -52,4 +52,12 @@ https://docs.freebsd.org/en/books/handbook/linuxemu/
 
 ## for every request there will be only 1 file/folder that runs (it can return rich content to the server can be html, htmx, graph etc) - database is shared
 ## every file/folder is a application in its own can have its different languague but the databse is shared postgresql
+
+## Analytics tasks
+0. coordinate with Nasir to provide the AI converted script 
+1. ask for the bd queries in the dashboard 
+2. maria db needs to be updated
+3. need to have pagination in the sql
+4. need to have stats of every query taking how long it is taking at db level (query_history)
+5. any query should not take more than 1 second
 
